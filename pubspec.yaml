@@ -21,6 +21,7 @@ version: 1.0.0+1
 
 environment:
   sdk: '>=2.18.6 <3.0.0'
+  flutter: ">=1.17.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -31,6 +32,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  vph_common_widgets: ^0.0.2
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -38,6 +40,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_svg: ^0.17.4
   hexcolor: ^3.0.1
+  vph_web_date_picker: ^0.0.4
 
 dev_dependencies:
   flutter_test:

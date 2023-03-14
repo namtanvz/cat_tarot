@@ -1,15 +1,15 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:tarot/constants.dart';
-
 import '../common/theme.dart';
+import 'signup.dart';
 
 class Login extends StatelessWidget {
   const Login({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var _headerHeight = 250.0;
+    var _headerHeight = 130.0;
     Key _formKey = GlobalKey<FormState>();
     Size size = MediaQuery.of(context).size;
     return Scaffold(
@@ -22,47 +22,48 @@ class Login extends StatelessWidget {
             ),
             SafeArea(
               child: Container(
-                  padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
-                  margin: EdgeInsets.fromLTRB(
-                      20, 0, 20, 10), // This will be the login form
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+                  margin: const EdgeInsets.fromLTRB(20, 0, 20, 10), // This will be the login form
                   child: Column(
                     children: [
                       Image.asset(
                         'assets/images/logo.png',
-                        height: size.height * 0.2,
+                        height: size.height * 0.3,
                       ),
-                      SizedBox(height: 30.0),
+                      const SizedBox(height: 30.0),
                       Form(
                           key: _formKey,
                           child: Column(
                             children: [
                               Container(
-                                child: TextField(
-                                  decoration: ThemeHelper().textInputDecoration(
-                                      'Username', 'Enter your user name'),
-                                ),
                                 decoration:
                                     ThemeHelper().inputBoxDecorationShaddow(),
+                                child: TextField(
+                                  decoration: ThemeHelper().textInputDecoration(
+                                      'Username', 
+                                      'Enter your user name'),
+                                ),
                               ),
-                              SizedBox(height: 30.0),
+                              const SizedBox(height: 30.0),
                               Container(
+                                decoration:
+                                    ThemeHelper().inputBoxDecorationShaddow(),
                                 child: TextField(
                                   obscureText: true,
                                   decoration: ThemeHelper().textInputDecoration(
-                                      'Password', 'Enter your password'),
+                                      'Password', 
+                                      'Enter your password'),
                                 ),
-                                decoration:
-                                    ThemeHelper().inputBoxDecorationShaddow(),
                               ),
-                              SizedBox(height: 15.0),
+                              const SizedBox(height: 15.0),
                               Container(
-                                margin: EdgeInsets.fromLTRB(10, 0, 10, 20),
+                                margin: const EdgeInsets.fromLTRB(10, 0, 10, 20),
                                 alignment: Alignment.topRight,
                                 child: GestureDetector(
                                   onTap: () {
                                     // Navigator.push( context, MaterialPageRoute( builder: (context) => ForgotPasswordPage()), );
                                   },
-                                  child: Text(
+                                  child: const Text(
                                     "Forgot your password?",
                                     style: TextStyle(
                                       color: kPrimaryLightColor,
@@ -77,10 +78,10 @@ class Login extends StatelessWidget {
                                   style: ThemeHelper().buttonStyle(),
                                   child: Padding(
                                     padding:
-                                        EdgeInsets.fromLTRB(40, 10, 40, 10),
+                                        const EdgeInsets.fromLTRB(40, 10, 40, 10),
                                     child: Text(
                                       'Sign In'.toUpperCase(),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white),
@@ -93,10 +94,10 @@ class Login extends StatelessWidget {
                                 ),
                               ),
                               Container(
-                                margin: EdgeInsets.fromLTRB(10, 20, 10, 20),
+                                margin: const EdgeInsets.fromLTRB(10, 20, 10, 20),
                                 //child: Text('Don\'t have an account? Create'),
                                 child: Text.rich(TextSpan(children: [
-                                  TextSpan(
+                                  const TextSpan(
                                     text: "Don\'t have an account? ",
                                     style: TextStyle(
                                       color: Colors.white,
@@ -106,18 +107,23 @@ class Login extends StatelessWidget {
                                     text: 'Create',
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () {
-                                        // Navigator.push(context, MaterialPageRoute(builder: (context) => RegistrationPage()));
+                                        Navigator.push(context,
+                                        MaterialPageRoute(builder: (context) => const SignUp()));
                                       },
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: kPrimaryLightColor),
                                   ),
-                                ])),
-                              ),
-                            ],
-                          )),
-                    ],
-                  )),
+                                ]
+                              )
+                            ),
+                          ),
+                        ],
+                      )
+                    ),
+                  ],
+                )
+              ),
             ),
           ],
         ),
@@ -125,3 +131,5 @@ class Login extends StatelessWidget {
     );
   }
 }
+
+
