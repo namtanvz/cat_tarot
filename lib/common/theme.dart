@@ -26,7 +26,7 @@ class ThemeHelper {
     );
   }
 
-  BoxDecoration inputBoxDecorationShaddow() {
+  BoxDecoration inputBoxDecorationShadow() {
     return BoxDecoration(boxShadow: [
       BoxShadow(
         color: Colors.black.withOpacity(0.1),

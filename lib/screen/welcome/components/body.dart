@@ -1,11 +1,17 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:tarot/common/theme.dart';
 import 'package:tarot/constants.dart';
 import 'package:tarot/screen/welcome/components/background.dart';
 
 import '../../login.dart';
+import '../../signup.dart';
+
 
 class Body extends StatelessWidget {
+  const Body({super.key});
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -38,7 +44,7 @@ class Body extends StatelessWidget {
                 ),
                 onPressed: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const Login()));
+                      MaterialPageRoute(builder: (context) => Login()));
                 },
                 child: const Text('LOG IN')),
           ),
@@ -55,7 +61,10 @@ class Body extends StatelessWidget {
                       const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
                   backgroundColor: kPrimaryLightColor,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => SignUp()));
+                },
                 child: const Text('SIGN UP')),
           ),
         )

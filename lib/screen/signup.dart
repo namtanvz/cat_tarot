@@ -1,159 +1,348 @@
-// ignore_for_file: non_constant_identifier_names, no_leading_underscores_for_local_identifiers
+// ignore_for_file: duplicate_import, no_leading_underscores_for_local_identifiers, avoid_print, prefer_const_constructors, library_private_types_in_public_api, prefer_const_literals_to_create_immutables, sort_child_properties_last, unnecessary_null_comparison, unused_local_variable, unused_field, use_build_context_synchronously, await_only_futures, non_constant_identifier_names, unused_label, dead_code
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:vph_web_date_picker/vph_web_date_picker.dart';
+import 'package:form_field_validator/form_field_validator.dart';
+import 'package:tarot/screen/model/profile.dart';
 
 import '../common/theme.dart';
 import 'login.dart';
+import 'model/profile.dart';
+import 'welcome/welcome_screen.dart';
 
-class SignUp extends StatelessWidget {
-  const SignUp({Key? key}) : super(key: key);
+class SignUp extends StatefulWidget {
+  const SignUp({super.key});
+
+  @override
+  _SignUpState createState() => _SignUpState();
+}
+
+class _SignUpState extends State<SignUp> {
+  final signUpKey = GlobalKey<FormState>();
+  Profile profile = Profile();
+  DateTime _dateTime = DateTime.now();
+  final textFieldKey = GlobalKey();
+  final _controller_birthday = TextEditingController();
+  final _controller_email = TextEditingController();
+  final _controller_name = TextEditingController();
+  final _controller_password = TextEditingController();
+  final Future<FirebaseApp> firebase = Firebase.initializeApp();
+
+  Future<DateTime?> pickDate() => showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100));
 
   @override
   Widget build(BuildContext context) {
-    final textFieldKey = GlobalKey();
-    // ignore: no_leading_underscores_for_local_identifiers
-    final _controller = TextEditingController();
-
-    var headerHeight = 50.0;
-    Key SingUpKey = GlobalKey<FormState>();
-    Size size = MediaQuery.of(context).size;
-
-    DateTime _selectedDate = DateTime.now(); // <-- new line
-
-    return Scaffold(
-      body: SingleChildScrollView(
-          child: Column(
-        children: [
-          Container(
-            height: headerHeight,
-          ),
-          SafeArea(
-              child: Container(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
-                  margin: const EdgeInsets.fromLTRB(20, 0, 20, 10),
-                  child: Column(
-                    // mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Image.asset(
-                        'assets/images/logo.png',
-                        height: 200,
-                      ),
-                      const SizedBox(height: 15.0),
-                      const Text(
-                        'Register',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                            color: Colors.white),
-                      ),
-                      const SizedBox(height: 30.0),
-                      Form(
-                          key: SingUpKey,
-                          child: Column(
-                            children: [
-                              Container(
-                                decoration:
-                                    ThemeHelper().inputBoxDecorationShaddow(),
-                                child: TextField(
-                                  keyboardType: TextInputType.emailAddress,
-                                  decoration: ThemeHelper().textInputDecoration(
-                                    'Email',
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 30.0),
-                              Container(
-                                decoration:
-                                    ThemeHelper().inputBoxDecorationShaddow(),
-                                child: TextField(
-                                  decoration: ThemeHelper().textInputDecoration(
-                                    'Username',
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 30.0),
-                              Container(
-                                decoration:
-                                    ThemeHelper().inputBoxDecorationShaddow(),
-                                child: TextField(
-                                  obscureText: true,
-                                  decoration: ThemeHelper().textInputDecoration(
-                                    'Password',
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 30.0),
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(30.0),
-                                ),
-                                child: SizedBox(
-                                  // width: 200,
-                                  height: 50.0,
-                                  child: TextField(
-                                    key: textFieldKey,
-                                    controller: _controller,
-                                    readOnly: true,
-                                    textAlign: TextAlign.start,
-                                    decoration: const InputDecoration(
-                                      hintText: "      Your Birthday",
-                                      border: InputBorder.none,
-                                      suffixIcon: Icon(Icons.today),
-                                    ),
-                                    onTap: () async {
-                                      final pickedDate =
-                                          await showWebDatePicker(
-                                        context: textFieldKey.currentContext!,
-                                        initialDate: _selectedDate,
-                                        firstDate: DateTime.now()
-                                            .add(const Duration(days: -14000)),
-                                        lastDate: DateTime.now()
-                                            .add(const Duration(days: 14000)),
-                                        width: 300,
-                                      );
-                                      if (pickedDate != null) {
-                                        _selectedDate = pickedDate;
-                                        _controller.text =
-                                            pickedDate.toString().split(' ')[0];
-                                      }
+    //* error checker
+    return FutureBuilder(
+        future: firebase,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Scaffold(
+              body: Center(
+                child: Text('${snapshot.error}'),
+              ),
+            );
+          }
+          if (snapshot.connectionState == ConnectionState.done) {
+            return Scaffold(
+              appBar: AppBar(
+                automaticallyImplyLeading: true,
+                leading: IconButton(
+                  icon: Icon(Icons.arrow_back_ios_new),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                const WelcomeScreen()));
+                  },
+                  ),
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                  ),
+              body: SingleChildScrollView(
+                child: Column(children: [
+                  SafeArea(
+                      child: Container(
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+                    margin: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+                    child: Column(
+                      children: <Widget>[
+                        Image.asset(
+                          'assets/images/logo.png',
+                          height: 200,
+                        ),
+                        const SizedBox(height: 15),
+                        const Text(
+                          'Register',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                              color: Colors.white),
+                        ),
+                        const SizedBox(height: 25.0),
+                        Form(
+                            key: signUpKey,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                //* E-mail
+                                Container(
+                                  decoration:
+                                      ThemeHelper().inputBoxDecorationShadow(),
+                                  child: TextFormField(
+                                    controller: _controller_email,
+                                    validator: MultiValidator([
+                                      RequiredValidator(
+                                          errorText: 'Please enter Email'),
+                                      EmailValidator(
+                                          errorText: 'Wrong Email format')
+                                    ]),
+                                    keyboardType: TextInputType.emailAddress,
+                                    onSaved: (_controller_email) {
+                                      profile.email = _controller_email;
                                     },
+                                    decoration: ThemeHelper()
+                                        .textInputDecoration('Email'),
                                   ),
                                 ),
-                              ),
-                              const SizedBox(height: 70.0),
-                              Container(
-                                decoration:
-                                    ThemeHelper().buttonBoxDecoration(context),
-                                width: 200,
-                                margin: const EdgeInsets.symmetric(vertical: 10),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(29),
-                                  child: TextButton(
-                                      style: TextButton.styleFrom(
-                                        foregroundColor: Colors.white,
-                                        padding: const EdgeInsets.symmetric(
-                                          vertical: 20,
-                                          horizontal: 40,
-                                        ),
-                                      ),
-                                      onPressed: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const Login()));
-                                      },
-                                      child: const Text('Register')),
+                                const SizedBox(height: 25.0),
+                                //* Username
+                                Container(
+                                  decoration:
+                                      ThemeHelper().inputBoxDecorationShadow(),
+                                  child: TextFormField(
+                                    controller: _controller_name,
+                                    validator: RequiredValidator(
+                                        errorText: 'Please enter Full Name'),
+                                    onSaved: (_controller_name) {
+                                      profile.fullname = _controller_name;
+                                    },
+                                    decoration: ThemeHelper()
+                                        .textInputDecoration('Full Name'),
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ))
-                    ],
-                  ))),
-        ],
-      )),
-    );
+                                const SizedBox(height: 25.0),
+                                //* Password
+                                Container(
+                                  decoration:
+                                      ThemeHelper().inputBoxDecorationShadow(),
+                                  child: TextFormField(
+                                    controller: _controller_password,
+                                    validator: RequiredValidator(
+                                        errorText: 'Please enter Password'),
+                                    obscureText: true,
+                                    onSaved: (_controller_password) {
+                                      profile.password = _controller_password;
+                                    },
+                                    decoration: ThemeHelper()
+                                        .textInputDecoration('Password'),
+                                  ),
+                                ),
+                                const SizedBox(height: 25.0),
+                                //* BirthDay
+                                Container(
+                                  decoration:
+                                      ThemeHelper().inputBoxDecorationShadow(),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: TextFormField(
+                                              validator: RequiredValidator(
+                                                  errorText:
+                                                      'Please enter your birthday'),
+                                              key: textFieldKey,
+                                              controller: _controller_birthday,
+                                              textAlign: TextAlign.start,
+                                              decoration: InputDecoration(
+                                                hintText: '   Your BirthDay',
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          50.0),
+                                                ),
+                                                contentPadding:
+                                                    EdgeInsets.symmetric(
+                                                        vertical: 10.0,
+                                                        horizontal: 10.0),
+                                                filled: true,
+                                                fillColor: Colors.white,
+                                              ),
+                                              readOnly: true,
+                                              onSaved: (_controller_birthday) {
+                                                profile.birthday =
+                                                    _controller_birthday;
+                                              },
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 8,
+                                          ),
+                                          MaterialButton(
+                                            onPressed: () async {
+                                              final date = await pickDate();
+                                              if (date == null) return;
+                                              setState(() => _dateTime = date);
+                                              _controller_birthday.text =
+                                                  '   ${date.day}/${date.month}/${date.year}';
+                                            },
+                                            child: Text(
+                                              'Select',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                            color: Color.fromARGB(
+                                                255, 88, 47, 125),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                //* register button
+                                const SizedBox(height: 60.0),
+                                Container(
+                                  decoration: ThemeHelper()
+                                      .buttonBoxDecoration(context),
+                                  width: 200,
+                                  margin: EdgeInsets.symmetric(vertical: 10),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(29),
+                                    child: ElevatedButton(
+                                        style: TextButton.styleFrom(
+                                          foregroundColor: Colors.white,
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 20,
+                                            horizontal: 40,
+                                          ),
+                                        ),
+                                        onPressed: () async {
+                                          if (signUpKey.currentState!
+                                              .validate()) {
+                                            signUpKey.currentState!.save();
+                                            try {
+                                              await FirebaseAuth.instance
+                                                  .createUserWithEmailAndPassword(
+                                                email: profile.email.toString(),
+                                                password:
+                                                    profile.password.toString(),
+                                              );
+                                              final uid = FirebaseAuth.instance.currentUser?.uid;
+                                              final docUser = FirebaseFirestore
+                                                  .instance
+                                                  .collection('Users')
+                                                  .doc('$uid');
+                                              await docUser
+                                                  .set(profile.toJson());
+                                              var snackBar = SnackBar(
+                                                content: Container(
+                                                  padding: EdgeInsets.all(16),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.green,
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                20)),
+                                                  ),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(
+                                                        'Successfully created',
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 15),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                                behavior:
+                                                    SnackBarBehavior.floating,
+                                                backgroundColor:
+                                                    Colors.transparent,
+                                                elevation: 0,
+                                              );
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(snackBar);
+                                              signUpKey.currentState!.reset();
+                                              await Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const Login()));
+                                            } on FirebaseAuthException catch (e) {
+                                              // print(e.code);
+                                              // print(e.message);
+                                              var snackBar = SnackBar(
+                                                content: Container(
+                                                  padding: EdgeInsets.all(16),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.red,
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                20)),
+                                                  ),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(
+                                                        '${e.message}',
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 15),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                                behavior:
+                                                    SnackBarBehavior.floating,
+                                                backgroundColor:
+                                                    Colors.transparent,
+                                                elevation: 0,
+                                              );
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(snackBar);
+                                            }
+                                          }
+                                        },
+                                        child: const Text('Register')),
+                                  ),
+                                )
+                              ],
+                            ))
+                      ],
+                    ),
+                  ))
+                ]),
+              ),
+            );
+          }
+          return Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        });
   }
 }
