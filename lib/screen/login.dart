@@ -9,6 +9,7 @@ import 'package:tarot/constants.dart';
 import 'package:tarot/screen/welcome/welcome_screen.dart';
 import '../common/theme.dart';
 import 'model/profile.dart';
+import 'navbar.dart';
 import 'signup.dart';
 import 'homepage.dart';
 
@@ -194,7 +195,7 @@ class _LoginState extends State<Login> {
                                           await Navigator.pushReplacement(
                                               context, MaterialPageRoute(
                                                   builder: (context) {
-                                            return Homepage();
+                                            return Navbar();
                                           }));
                                         } on FirebaseAuthException catch (e) {
                                           var snackBar = SnackBar(

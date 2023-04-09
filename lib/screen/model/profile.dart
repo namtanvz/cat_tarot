@@ -17,4 +17,11 @@ class Profile {
     'password' : password,
     'birthday' : birthday
   };
+
+  static Profile fromJson(Map<String, dynamic> json) => Profile(
+    email: json['email'],
+    fullname: json['fullname'],
+    password: json['password'],
+    birthday: json['birthday'],
+  );
 }

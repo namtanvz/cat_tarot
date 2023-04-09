@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'constants.dart';
+import 'screen/homepage.dart';
+import 'screen/navbar.dart';
 import 'screen/welcome/welcome_screen.dart';
 
 void main() => runApp(const MyApp());
@@ -19,10 +21,12 @@ class MyApp extends StatelessWidget {
         title: 'Tarot card',
         theme: ThemeData(
           primaryColor: kPrimaryColor,
-          scaffoldBackgroundColor: Colors.brown,
-          primarySwatch: Colors.purple
+          scaffoldBackgroundColor: kBackground,
+          primarySwatch: kSwatch
         ),
-        home: const WelcomeScreen());
+        home: const WelcomeScreen()
+        // home: const Navbar()
+        );
   }
 }
 

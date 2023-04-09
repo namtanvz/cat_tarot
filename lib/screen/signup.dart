@@ -59,13 +59,12 @@ class _SignUpState extends State<SignUp> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                const WelcomeScreen()));
+                            builder: (context) => const WelcomeScreen()));
                   },
-                  ),
+                ),
                 backgroundColor: Colors.transparent,
                 elevation: 0,
-                  ),
+              ),
               body: SingleChildScrollView(
                 child: Column(children: [
                   SafeArea(
@@ -243,7 +242,8 @@ class _SignUpState extends State<SignUp> {
                                                 password:
                                                     profile.password.toString(),
                                               );
-                                              final uid = FirebaseAuth.instance.currentUser?.uid;
+                                              final uid = FirebaseAuth
+                                                  .instance.currentUser?.uid;
                                               final docUser = FirebaseFirestore
                                                   .instance
                                                   .collection('Users')
