@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'constants.dart';
+import 'screen/card_info.dart';
 import 'screen/homepage.dart';
 import 'screen/navbar.dart';
 import 'screen/welcome/welcome_screen.dart';
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
         ),
         home: const WelcomeScreen()
         // home: const Navbar()
+        // home: const CardInfo()
         );
   }
 }

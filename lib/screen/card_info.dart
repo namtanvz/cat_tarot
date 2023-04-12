@@ -1,37 +1,158 @@
-// ignore_for_file: library_private_types_in_public_api, sized_box_for_whitespace, prefer_const_constructors
+// ignore_for_file: library_private_types_in_public_api, sized_box_for_whitespace, prefer_const_constructors, unused_local_variable, prefer_const_literals_to_create_immutables, unused_element, avoid_returning_null_for_void, avoid_unnecessary_containers, avoid_print
 
 import 'package:flutter/material.dart';
+import 'package:flip_card/flip_card.dart';
+import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
+import 'package:get/get.dart';
+
+import '../constants.dart';
+import '../data/tarot_json.dart';
+import 'card_details.dart';
+import 'model/tarot_card.dart';
 
 class CardInfo extends StatefulWidget {
-  const CardInfo ({super.key});
+  const CardInfo({super.key});
 
   @override
   _CardInfoState createState() => _CardInfoState();
 }
 
 class _CardInfoState extends State<CardInfo> {
-  final _headerHeight = 130.0;
+  GlobalKey<FlipCardState> cardKey1 = GlobalKey<FlipCardState>();
+  GlobalKey<FlipCardState> cardKey2 = GlobalKey<FlipCardState>();
+  GlobalKey<FlipCardState> cardKey3 = GlobalKey<FlipCardState>();
+  GlobalKey<FlipCardState> cardKey4 = GlobalKey<FlipCardState>();
+  TarotCard cardInfo = TarotCard();
+
+  DateFormat format = DateFormat('dd/MM');
+  List<bool> flips = [false, false, false, false];
+  List tarots = [];
+  List unlockCard = [];
+
+  @override
+  void initState() {
+    super.initState();
+    tarots.addAll(tarotData);
+    unlockCard.addAll(tarotData);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              height: _headerHeight,
-              child: Center(
-                child: Text("Card Information",
-                style: TextStyle(
-                  fontSize: 40,
-                  color: Colors.white,
-                  ),
-                ),
-              ),
-            )
-          ],
+      appBar: AppBar(
+        backgroundColor: kBackground,
+        automaticallyImplyLeading: false,
+        elevation: .0,
+        centerTitle: true,
+        title: Text(
+          'Today is ${format.format(DateTime.now())}',
+          style: TextStyle(
+            fontSize: width / 20,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(height: 12),
+          Container(
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _buildTarotCard(cardKey1, 0, 'Overview'.trArgs()),
+                    SizedBox(width: 16),
+                    _buildTarotCard(cardKey2, 1, 'Work'.trArgs()),
+                  ],
+                ),
+                SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _buildTarotCard(cardKey3, 2, 'Love'.trArgs()),
+                    SizedBox(width: 16),
+                    _buildTarotCard(cardKey4, 3, 'Finance'.trArgs()),
+                  ],
+                ),
+                SizedBox(height: 30),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTarotCard(key, number, title) {
+    return Column(
+      children: [
+        FlipCard(
+          key: key,
+          flipOnTouch: false,
+          front: GestureDetector(
+            onTap: () {
+              tarots.shuffle();
+              key.currentState.toggleCard();
+              setState(() {
+                flips[number] = true;
+              });
+              unlockCard[number] = tarots[0];
+              tarots.removeAt(0);
+            },
+            child: Container(
+              height: height * .32,
+              width: width * .4,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: kGradient,
+              ),
+              child: Lottie.asset('assets/lottie/lottie_card.json'),
+            ),
+          ),
+          back: GestureDetector(
+            onTap: () {
+              //! Problem 
+              if (flips[number] = true) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        TarotDetailScreen(cardData: unlockCard[number]),
+                  ),
+                );
+              }
+              //!
+            },
+            child: Container(
+              height: height * .32,
+              width: width * .4,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
+                  color: kGradient,
+                  image: DecorationImage(
+                    image: AssetImage(unlockCard.length < number + 1
+                        ? 'images/${tarots[number]['img']}'
+                        : 'images/${unlockCard[number]['img']}'),
+                    fit: BoxFit.cover,
+                  )),
+            ),
+          ),
+        ),
+        SizedBox(height: 12),
+        Text(
+          flips[number] == true ? unlockCard[number]['name'] : title,
+          style: TextStyle(
+              fontSize: width / 24,
+              fontWeight: FontWeight.w400,
+              letterSpacing: 1.5,
+              wordSpacing: 1.5,
+              color: Colors.white),
+          textAlign: TextAlign.center,
+        )
+      ],
     );
   }
 }
@@ -134,164 +255,6 @@ class _CardInfoState extends State<CardInfo> {
 //               onPressed: _drawCards,
 //               child: Text('Draw Cards'),
 //             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-
-
-
-
-//show detail of card
-
-// [
-//   {
-//     "name": "The Fool",
-//     "number": 0,
-//     "arcana": "Major",
-//     "suit": "",
-//     "img": "assets/images/fool.jpg",
-//     "fortune_telling": "Some fortune telling description...",
-//     "keywords": "Beginning, Spontaneity, Innocence",
-//     "meaning_light": "Some light meaning...",
-//     "meaning_shadow": "Some shadow meaning..."
-//   },
-//   // Add the rest of your Tarot cards here...
-// ]
-
-
-
-// flutter:
-//   assets:
-//     - assets/images/
-//     - assets/tarot_data.json
-
-
-// class TarotCard {
-//   final String name;
-//   final int number;
-//   final String arcana;
-//   final String suit;
-//   final String image;
-//   final String fortuneTelling;
-//   final String keywords;
-//   final String meaningLight;
-//   final String meaningShadow;
-
-//   TarotCard({
-//     required this.name,
-//     required this.number,
-//     required this.arcana,
-//     required this.suit,
-//     required this.image,
-//     required this.fortuneTelling,
-//     required this.keywords,
-//     required this.meaningLight,
-//     required this.meaningShadow,
-//   });
-
-//   factory TarotCard.fromJson(Map<String, dynamic> json) {
-//     return TarotCard(
-//       name: json['name'],
-//       number: json['number'],
-//       arcana: json['arcana'],
-//       suit: json['suit'],
-//       image: json['img'],
-//       fortuneTelling: json['fortune_telling'],
-//       keywords: json['keywords'],
-//       meaningLight: json['meaning_light'],
-//       meaningShadow: json['meaning_shadow'],
-//     );
-//   }
-// }
-
-
-
-// import 'package:flutter/material.dart';
-// import 'tarot_card.dart';
-
-// class TarotCardDetails extends StatelessWidget {
-//   final TarotCard tarotCard;
-
-//   TarotCardDetails({required this.tarotCard});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text(tarotCard.name),
-//       ),
-//       body: SingleChildScrollView(
-//         padding: EdgeInsets.all(16.0),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             Center(
-//               child: Image.asset(tarotCard.image),
-//             ),
-//             SizedBox(height: 16.0),
-//             Text('Number: ${tarotCard.number}'),
-//             Text('Arcana: ${tarotCard.arcana}'),
-//             Text('Suit: ${tarotCard.suit}'),
-//             SizedBox(height: 16.0),
-//             Text('Fortune Telling:'),
-//             Text(tarotCard.fortuneTelling),
-//             SizedBox(height: 16.0),
-//             Text('Keywords: ${tarotCard.keywords}'),
-//             SizedBox(height: 16.0),
-//             Text('Meaning in Light:'),
-//             Text(tarotCard.meaningLight),
-//             SizedBox(height: 16.0),
-//             Text('Meaning in Shadow:'),
-//             Text(tarotCard.meaningShadow),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-
-// import 'package:flutter/material.dart';
-// import 'tarot_card.dart';
-
-// class TarotCardDetails extends StatelessWidget {
-//   final TarotCard tarotCard;
-
-//   TarotCardDetails({required this.tarotCard});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text(tarotCard.name),
-//       ),
-//       body: SingleChildScrollView(
-//         padding: EdgeInsets.all(16.0),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             Center(
-//               child: Image.asset(tarotCard.image),
-//             ),
-//             SizedBox(height: 16.0),
-//             Text('Number: ${tarotCard.number}'),
-//             Text('Arcana: ${tarotCard.arcana}'),
-//             Text('Suit: ${tarotCard.suit}'),
-//             SizedBox(height: 16.0),
-//             Text('Fortune Telling:'),
-//             Text(tarotCard.fortuneTelling),
-//             SizedBox(height: 16.0),
-//             Text('Keywords: ${tarotCard.keywords}'),
-//             SizedBox(height: 16.0),
-//             Text('Meaning in Light:'),
-//             Text(tarotCard.meaningLight),
-//             SizedBox(height: 16.0),
-//             Text('Meaning in Shadow:'),
-//             Text(tarotCard.meaningShadow),
 //           ],
 //         ),
 //       ),
