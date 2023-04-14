@@ -1,15 +1,16 @@
-// ignore_for_file: library_private_types_in_public_api, sized_box_for_whitespace, prefer_const_constructors, unused_local_variable, prefer_const_literals_to_create_immutables, unused_element, avoid_returning_null_for_void, avoid_unnecessary_containers, avoid_print
+// ignore_for_file: library_private_types_in_public_api, sized_box_for_whitespace, prefer_const_constructors, unused_local_variable, prefer_const_literals_to_create_immutables, unused_element, avoid_returning_null_for_void, avoid_unnecessary_containers, avoid_print, unused_import, dead_code
 
-import 'package:flutter/material.dart';
 import 'package:flip_card/flip_card.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
-import 'package:get/get.dart';
+
+import 'package:tarot/screen/details_page.dart';
 
 import '../constants.dart';
 import '../data/tarot_json.dart';
-import 'card_details.dart';
-import 'model/tarot_card.dart';
+import 'model/global_card.dart';
 
 class CardInfo extends StatefulWidget {
   const CardInfo({super.key});
@@ -23,7 +24,6 @@ class _CardInfoState extends State<CardInfo> {
   GlobalKey<FlipCardState> cardKey2 = GlobalKey<FlipCardState>();
   GlobalKey<FlipCardState> cardKey3 = GlobalKey<FlipCardState>();
   GlobalKey<FlipCardState> cardKey4 = GlobalKey<FlipCardState>();
-  TarotCard cardInfo = TarotCard();
 
   DateFormat format = DateFormat('dd/MM');
   List<bool> flips = [false, false, false, false];
@@ -56,7 +56,7 @@ class _CardInfoState extends State<CardInfo> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(height: 12),
+          SizedBox(height: 4),
           Container(
             child: Column(
               children: [
@@ -68,7 +68,7 @@ class _CardInfoState extends State<CardInfo> {
                     _buildTarotCard(cardKey2, 1, 'Work'.trArgs()),
                   ],
                 ),
-                SizedBox(height: 16),
+                SizedBox(height: 8),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -77,7 +77,36 @@ class _CardInfoState extends State<CardInfo> {
                     _buildTarotCard(cardKey4, 3, 'Finance'.trArgs()),
                   ],
                 ),
-                SizedBox(height: 30),
+                SizedBox(height: 16),
+                flips.contains(false)
+                    ? Container()
+                    : Container(
+                        margin: EdgeInsets.symmetric(horizontal: 48.0),
+                        child: ElevatedButton(
+                            onPressed: () {
+                              global_Results = unlockCard.sublist(0, 4);
+                              print(global_Results[0]['name']);
+                              print(global_Results[1]['name']);
+                              print(global_Results[2]['name']);
+                              print(global_Results[3]['name']);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => DetailPage()));
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Result',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: width / 24,
+                                      fontWeight: FontWeight.w600),
+                                )
+                              ],
+                            )),
+                      )
               ],
             ),
           )
@@ -100,6 +129,7 @@ class _CardInfoState extends State<CardInfo> {
                 flips[number] = true;
               });
               unlockCard[number] = tarots[0];
+              // print(unlockCard[number]);
               tarots.removeAt(0);
             },
             child: Container(
@@ -113,19 +143,7 @@ class _CardInfoState extends State<CardInfo> {
             ),
           ),
           back: GestureDetector(
-            onTap: () {
-              //! Problem 
-              if (flips[number] = true) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        TarotDetailScreen(cardData: unlockCard[number]),
-                  ),
-                );
-              }
-              //!
-            },
+            onTap: () => null,
             child: Container(
               height: height * .32,
               width: width * .4,
@@ -157,17 +175,12 @@ class _CardInfoState extends State<CardInfo> {
   }
 }
 
-
-
 // class TarotCard {
 //   final String name;
 //   final String image;
 
 //   TarotCard({required this.name, required this.image});
 // }
-
-
-
 
 // import 'dart:math';
 // import 'package:flutter/material.dart';
@@ -269,9 +282,6 @@ class _CardInfoState extends State<CardInfo> {
 //     sdk: flutter
 //   sensors: ^2.0.0
 
-
-
-
 // import 'package:sensors/sensors.dart';
 // // Other imports...
 
@@ -312,4 +322,3 @@ class _CardInfoState extends State<CardInfo> {
 //     });
 //   }
 // }
-

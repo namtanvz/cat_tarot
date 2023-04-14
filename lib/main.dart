@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'constants.dart';
 import 'screen/card_info.dart';
 import 'screen/homepage.dart';
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Tarot card',
         theme: ThemeData(
@@ -25,9 +26,9 @@ class MyApp extends StatelessWidget {
           scaffoldBackgroundColor: kBackground,
           primarySwatch: kSwatch
         ),
-        home: const WelcomeScreen()
+        // home: const WelcomeScreen()
         // home: const Navbar()
-        // home: const CardInfo()
+        home: const CardInfo()
         );
   }
 }
