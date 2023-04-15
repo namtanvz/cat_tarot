@@ -4,6 +4,7 @@ import 'constants.dart';
 import 'screen/card_info.dart';
 import 'screen/homepage.dart';
 import 'screen/navbar.dart';
+import 'screen/setting.dart';
 import 'screen/welcome/welcome_screen.dart';
 
 void main() => runApp(const MyApp());
@@ -26,9 +27,10 @@ class MyApp extends StatelessWidget {
           scaffoldBackgroundColor: kBackground,
           primarySwatch: kSwatch
         ),
-        // home: const WelcomeScreen()
+        home: const WelcomeScreen()
         // home: const Navbar()
-        home: const CardInfo()
+        // home: const CardInfo()
+        // home: const Setting()
         );
   }
 }

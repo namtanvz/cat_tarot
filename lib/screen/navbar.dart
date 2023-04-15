@@ -10,7 +10,7 @@ import 'homepage.dart';
 import 'user_info.dart';
 
 class Navbar extends StatefulWidget {
-  const Navbar ({super.key});
+  const Navbar({super.key});
 
   @override
   _NavbarState createState() => _NavbarState();
@@ -28,11 +28,11 @@ class _NavbarState extends State<Navbar> {
       size: 30,
       color: kPrimaryLightColor,
     ),
-    Icon(
-      Icons.person,
-      size: 30,
-      color: kPrimaryLightColor,
-    ),
+    // Icon(
+    //   Icons.person,
+    //   size: 30,
+    //   color: kPrimaryLightColor,
+    // ),
     Icon(
       Icons.settings,
       size: 30,
@@ -59,9 +59,9 @@ class _NavbarState extends State<Navbar> {
         color: kPrimaryColor,
       ),
       body: Container(
-          child: getSelectedWidget(index: index),
-        ),
-      );
+        child: getSelectedWidget(index: index),
+      ),
+    );
   }
 
   Widget getSelectedWidget({required int index}) {
@@ -73,10 +73,10 @@ class _NavbarState extends State<Navbar> {
       case 1:
         widget = const CardInfo();
         break;
+      // case 2:
+      //   widget = const UserInfo();
+      //   break;
       case 2:
-        widget = const UserInfo();
-        break;
-      case 3:
         widget = const Setting();
         break;
       default:

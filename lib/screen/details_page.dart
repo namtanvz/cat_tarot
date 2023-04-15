@@ -1,98 +1,10 @@
 // ignore_for_file: sized_box_for_whitespace, prefer_const_constructors, library_private_types_in_public_api, prefer_typing_uninitialized_variables, use_key_in_widget_constructors, non_constant_identifier_names, prefer_const_literals_to_create_immutables, unused_element, unused_import, prefer_const_constructors_in_immutables
 
-// import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
-
-// import '../constants.dart';
-
-// class DetailPage extends StatefulWidget {
-//   final results;
-//   DetailPage({this.results});
-
-//   @override
-//   State<StatefulWidget> createState() => _DetailPageState();
-// }
-
-// class _DetailPageState extends State<DetailPage> {
-//   @override
-//   void initState() {
-//     super.initState();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         backgroundColor: kBackground,
-//         elevation: 4.0,
-//         centerTitle: true,
-//         title: Text(
-//           'Results',
-//           style: TextStyle(
-//             color: Colors.white,
-//             fontSize: width / 20,
-//             fontWeight: FontWeight.w600,
-//           ),
-//         ),
-//       ),
-//       body: Container(
-//         color: kPrimaryColor,
-//         height: height,
-//         width: width,
-//         padding: EdgeInsets.symmetric(horizontal: 20),
-//         child: SingleChildScrollView(
-//             physics: ClampingScrollPhysics(),
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 SizedBox(height: 20),
-//                 _buildTitle('Overview', widget.results[0]['name']),
-//                 _buildTitle('Work', widget.results[1]['name']),
-//                 _buildTitle('Love', widget.results[2]['name']),
-//                 _buildTitle('Finance', widget.results[3]['name']),
-//               ],
-//             )),
-//       ),
-//     );
-//   }
-
-//   Widget _buildTitle(title, value) {
-//     return RichText(
-//       text: TextSpan(children: [
-//         TextSpan(
-//           text: title + ':\t\t',
-//           style: TextStyle(
-//             color: Colors.white,
-//             fontSize: width / 22.5,
-//             fontWeight: FontWeight.w600,
-//           ),
-//         ),
-//         TextSpan(
-//             text: value,
-//             style: TextStyle(
-//               color: Colors.white,
-//               fontSize: width / 23.0,
-//               fontWeight: FontWeight.w600,
-//             )),
-//       ]),
-//     );
-//   }
-
-//   Widget _buildContent(List content) {
-//     return Text(
-//       content.join('\n\n'),
-//       style: TextStyle(
-//         color: Colors.white,
-//         fontSize: width / 25.0,
-//         fontWeight: FontWeight.w400,
-//       ),
-//     );
-//   }
-// }
-
 import 'package:flutter/material.dart';
+import 'package:tarot/screen/navbar.dart';
 
 import '../constants.dart';
+import 'card_info.dart';
 import 'model/global_card.dart';
 
 class DetailPage extends StatefulWidget {
@@ -107,6 +19,16 @@ class _DetailPageState extends State<DetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: true,
+        leading: IconButton(
+                  icon: Icon(Icons.arrow_back_ios_new),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const Navbar()));
+                  },
+                ),
         backgroundColor: kBackground,
         elevation: 4.0,
         centerTitle: true,

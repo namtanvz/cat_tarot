@@ -118,24 +118,8 @@ class _LoginState extends State<Login> {
                                             'Password', 'Enter Your password'),
                                   ),
                                 ),
-                                const SizedBox(height: 15),
-                                //! Forget password
-                                Container(
-                                  margin:
-                                      const EdgeInsets.fromLTRB(10, 0, 10, 20),
-                                  alignment: Alignment.topRight,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      // Navigator.push( context, MaterialPageRoute( builder: (context) => ForgotPasswordPage()), );
-                                    },
-                                    child: const Text(
-                                      "Forgot your password?",
-                                      style: TextStyle(
-                                        color: kPrimaryLightColor,
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                                const SizedBox(height: 32),
+
                                 //* sign in button
                                 Container(
                                   decoration: ThemeHelper()

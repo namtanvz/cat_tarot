@@ -53,6 +53,9 @@ dependencies:
   flip_card: ^0.7.0
   get: ^4.6.5
   flutter_neumorphic: ^3.2.0
+  shake: ^2.2.0
+  sensors: ^2.0.3
+  sensors_plus: ^1.4.1
   
   
 
