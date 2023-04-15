@@ -60,14 +60,14 @@ class _UserInfoState extends State<UserInfo> {
       body: FutureBuilder<Profile?>(
           future: readUser(),
           builder: (context, snapshot) {
-            final user = snapshot.data!;
+            final users = snapshot.data!;
             if (snapshot.hasError) {
               return Center(child: Text(snapshot.error.toString()));
             } else if (snapshot.hasData) {
-              profile.email = user.email;
-              profile.fullname = user.fullname;
-              profile.password = user.password;
-              profile.birthday = user.birthday;
+              profile.email = users.email;
+              profile.fullname = users.fullname;
+              profile.password = users.password;
+              profile.birthday = users.birthday;
               print(
                   'email : ${profile.email}\n fullname : ${profile.fullname}\n password : ${profile.password}\n birthday : ${profile.birthday}');
               var size = MediaQuery.of(context).size;
@@ -117,52 +117,8 @@ class _UserInfoState extends State<UserInfo> {
                                           },
                                           decoration: ThemeHelper()
                                               .textInputDecoration(
-                                                  '  ${profile.fullname}'),
+                                                  '${profile.fullname}'),
                                         ),
-                                      ),
-                                      IconButton(
-                                        onPressed: () async {
-                                          editKey.currentState?.save();
-                                          var snackBar = SnackBar(
-                                            content: Container(
-                                              padding: EdgeInsets.all(16),
-                                              decoration: BoxDecoration(
-                                                color: Colors.green,
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(20)),
-                                              ),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    'Successfully Updated',
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 15),
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                            behavior: SnackBarBehavior.floating,
-                                            backgroundColor: Colors.transparent,
-                                            elevation: 0,
-                                          );
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(snackBar);
-                                          final uid = FirebaseAuth
-                                              .instance.currentUser?.uid;
-                                          final docUser = FirebaseFirestore
-                                              .instance
-                                              .collection('Users')
-                                              .doc(uid);
-                                          docUser.update({
-                                            'fullname': '${profile.fullname}',
-                                          });
-                                          editKey.currentState?.reset();
-                                        },
-                                        icon: Icon(Icons.backup),
-                                        color: Colors.white,
                                       ),
                                     ],
                                   ),
@@ -176,12 +132,12 @@ class _UserInfoState extends State<UserInfo> {
                                     borderRadius: BorderRadius.circular(24),
                                     child: TextButton(
                                       style: TextButton.styleFrom(
-                                        foregroundColor: Colors.white,
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 16, horizontal: 32),
-                                        backgroundColor: Colors.red,
-                                      ),
+                                          foregroundColor: Colors.white,
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 16, horizontal: 32),
+                                          backgroundColor: kPrimaryColor),
                                       onPressed: () async {
+                                        editKey.currentState?.save();
                                         var snackBar = SnackBar(
                                           content: Container(
                                             padding: EdgeInsets.all(16),
@@ -195,7 +151,7 @@ class _UserInfoState extends State<UserInfo> {
                                                   CrossAxisAlignment.center,
                                               children: [
                                                 Text(
-                                                  'Successfully Delete',
+                                                  'Successfully Updated',
                                                   style: TextStyle(
                                                       color: Colors.white,
                                                       fontSize: 15),
@@ -215,14 +171,12 @@ class _UserInfoState extends State<UserInfo> {
                                             .instance
                                             .collection('Users')
                                             .doc(uid);
-                                        docUser.delete();
-                                        await Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    WelcomeScreen()));
+                                        docUser.update({
+                                          'fullname': '${profile.fullname}',
+                                        });
+                                        editKey.currentState?.reset();
                                       },
-                                      child: Text('Delete Profile',
+                                      child: Text('Updated Profile',
                                           style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold,
