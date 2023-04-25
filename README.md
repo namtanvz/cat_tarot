@@ -1,4 +1,4 @@
-# project_1
+# Cat Tarot 🐱
 
 A new Flutter project.
 
